@@ -36,8 +36,48 @@ class MultilayerPreceptron:
 
 
     @staticmethod
-    def back_propagation():
-        
+    def back_propagation(data, labels, layers, theta):
+        num_layers = len(layers)
+        (num_examples, num_features) = data.shape
+        num_label_types = layers[-1]
+
+        deltas = {}
+
+        for layer_index in range(num_layers -1):
+            in_count = layers[layer_index]
+            out_count = layers[layer_index+1]
+            deltas[layer_index] = np.zeros((out_count, in_count+1))
+        for example_index in range(num_examples):
+            layers_inputs = {}
+            layers_activations = {}
+            layers_activation = data[example_index,:].reshape((num_features, 1))
+            layers_activations[0] = layers_activation
+
+            for layers_index in range(num_layers -1):
+                layers_theta = theta[layers_index]
+                layer_input = np.dot(layers_theta,layers_activation)
+                layers_activation = np.vstack((np.array([[1]]), sigmoid(layer_input)))
+                layers_inputs[layers_index+1] = layer_input
+                layers_activations[layers_index+1] = layers_activation
+            output_layer_activation = layers_activations[1:, :]
+
+            delta = {}
+            bitwise_label = np.zeros((num_label_types, 1))
+            bitwise_label[labels[example_index][0]]=1
+            #计算输出层与真实值的差异
+            delta[num_layers -1] =output_layer_activation -1
+
+            for layers_index in range(num_layers-2, 0,-1):
+                layers_theta = theta[layer_index]
+                next_delta = delta[layer_index+1]
+                layer_input = layers_inputs[layers_index]
+                layer_input = np.vstack(np.array((1), layer_input))
+                delta[layer_index] = np.dot(layers_theta.T)
+
+
+
+
+
 
 
 
