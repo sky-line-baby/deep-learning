@@ -35,6 +35,12 @@ class MultilayerPreceptron:
 
 
 
+    @staticmethod
+    def back_propagation():
+        
+
+
+
 
     @staticmethod
     def cost_function(data, labels, thetas, layers):
